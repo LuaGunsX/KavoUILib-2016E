@@ -1,5 +1,5 @@
 --// Original project by xHeptc
---// Rewrited backport by java (@serverequiptool)
+--// Rewritten backport by java (@serverequiptool)
 --// Backport Functions \\--
 local function Color3fromRGB(r,g,b) return Color3.new(r/255,g/255,b/255) end
 --// END \\--
