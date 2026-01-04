@@ -3,6 +3,38 @@
 --// Backport Functions \\--
 local function Color3fromRGB(r,g,b) return Color3.new(r/255,g/255,b/255) end
 
+local function Color3fromHSV(h, s, v) -- thanks louknt for this fromHsv func
+	h = h % 1 -- clamp
+	local r, g, b
+
+	if s == 0 then
+		r, g, b = v, v, v
+	else
+		local i = math.floor(h * 6)
+		local f = h * 6 - i
+		local p = v * (1 - s)
+		local q = v * (1 - f * s)
+		local t = v * (1 - (1 - f) * s)
+
+		i = i % 6
+		if i == 0 then
+			r, g, b = v, t, p
+		elseif i == 1 then
+			r, g, b = q, v, p
+		elseif i == 2 then
+			r, g, b = p, v, t
+		elseif i == 3 then
+			r, g, b = p, q, v
+		elseif i == 4 then
+			r, g, b = t, p, v
+		elseif i == 5 then
+			r, g, b = v, p, q
+		end
+	end
+
+	return Color3.new(r,g,b)
+end
+
 function TweenCreate(object, time, goalProps) -- sultan's tweenservice wrapper
 	local startValues = {}
 	local deltas = {}
@@ -2580,7 +2612,7 @@ function Kavo.CreateLib(kavName, themeList)
                         local cy = cursor.AbsoluteSize.Y/2
                         cursor.Position = UDim2.new(x,-cx,y,-cy)
                         color = {1-x,1-y,color[3]}
-                        local realcolor = Color3.fromHSV(color[1],color[2],color[3])
+                        local realcolor = Color3fromHSV(color[1],color[2],color[3])
                         colorCurrent.BackgroundColor3 = realcolor
                         callback(realcolor)
                     end
@@ -2593,9 +2625,9 @@ function Kavo.CreateLib(kavName, themeList)
                         y = y/maxY
                         local cy = cursor2.AbsoluteSize.Y/2
                         cursor2.Position = UDim2.new(0.5,0,y,-cy)
-                        cursor2.ImageColor3 = Color3.fromHSV(0,0,y)
+                        cursor2.ImageColor3 = Color3fromHSV(0,0,y)
                         color = {color[1],color[2],1-y}
-                        local realcolor = Color3.fromHSV(color[1],color[2],color[3])
+                        local realcolor = Color3fromHSV(color[1],color[2],color[3])
                         colorCurrent.BackgroundColor3 = realcolor
                         callback(realcolor)
                     end
@@ -2607,7 +2639,7 @@ function Kavo.CreateLib(kavName, themeList)
                     color = {tbl[1],tbl[2],tbl[3]}
                     cursor.Position = UDim2.new(color[1],-cx,color[2]-1,-cy)
                     cursor2.Position = UDim2.new(0.5,0,color[3]-1,-cy)
-                    local realcolor = Color3.fromHSV(color[1],color[2],color[3])
+                    local realcolor = Color3fromHSV(color[1],color[2],color[3])
                     colorCurrent.BackgroundColor3 = realcolor
                 end
                 local function setrgbcolor(tbl)
@@ -2615,7 +2647,7 @@ function Kavo.CreateLib(kavName, themeList)
                     local cy = cursor.AbsoluteSize.Y/2
                     color = {tbl[1],tbl[2],color[3]}
                     cursor.Position = UDim2.new(color[1],-cx,color[2]-1,-cy)
-                    local realcolor = Color3.fromHSV(color[1],color[2],color[3])
+                    local realcolor = Color3fromHSV(color[1],color[2],color[3])
                     colorCurrent.BackgroundColor3 = realcolor
                     callback(realcolor)
                 end
