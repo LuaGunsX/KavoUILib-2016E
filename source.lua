@@ -53,6 +53,27 @@ function TweenCreate(object, time, goalProps) -- sultan's tweenservice wrapper
 		end
 	}
 end
+
+function UIListLayout(frame, vertical, padding)
+    padding = padding or 0
+
+    local function upd()
+        local offset = 0
+        for _, v in ipairs(frame:GetChildren()) do
+            if v:IsA("GuiObject") and v.Visible then
+                v.Position = vertical
+                    and UDim2.fromOffset(0, offset)
+                    or UDim2.fromOffset(offset, 0)
+
+                offset = offset + (vertical and v.AbsoluteSize.Y or v.AbsoluteSize.X) + padding
+            end
+        end
+    end
+
+    frame.ChildAdded:Connect(upd)
+    frame.ChildRemoved:Connect(upd)
+    upd()
+end
 --// END \\--
 local Kavo = {}
 
@@ -250,17 +271,13 @@ function Kavo.CreateLib(kavName, themeList)
     end
     local ScreenGui = Instance.new("ScreenGui")
     local Main = Instance.new("Frame")
-    local MainCorner = Instance.new("UICorner")
     local MainHeader = Instance.new("Frame")
-    local headerCover = Instance.new("UICorner")
     local coverup = Instance.new("Frame")
     local title = Instance.new("TextLabel")
     local close = Instance.new("ImageButton")
     local MainSide = Instance.new("Frame")
-    local sideCorner = Instance.new("UICorner")
     local coverup_2 = Instance.new("Frame")
     local tabFrames = Instance.new("Frame")
-    local tabListing = Instance.new("UIListLayout")
     local pages = Instance.new("Frame")
     local Pages = Instance.new("Folder")
     local infoContainer = Instance.new("Frame")
@@ -290,18 +307,11 @@ function Kavo.CreateLib(kavName, themeList)
     Main.Position = UDim2.new(0.336503863, 0, 0.275485456, 0)
     Main.Size = UDim2.new(0, 525, 0, 318)
 
-    MainCorner.CornerRadius = UDim.new(0, 4)
-    MainCorner.Name = "MainCorner"
-    MainCorner.Parent = Main
-
     MainHeader.Name = "MainHeader"
     MainHeader.Parent = Main
     MainHeader.BackgroundColor3 = themeList.Header
     Objects[MainHeader] = "BackgroundColor3"
     MainHeader.Size = UDim2.new(0, 525, 0, 29)
-    headerCover.CornerRadius = UDim.new(0, 4)
-    headerCover.Name = "headerCover"
-    headerCover.Parent = MainHeader
 
     coverup.Name = "coverup"
     coverup.Parent = MainHeader
@@ -354,10 +364,6 @@ function Kavo.CreateLib(kavName, themeList)
     MainSide.Position = UDim2.new(-7.4505806e-09, 0, 0.0911949649, 0)
     MainSide.Size = UDim2.new(0, 149, 0, 289)
 
-    sideCorner.CornerRadius = UDim.new(0, 4)
-    sideCorner.Name = "sideCorner"
-    sideCorner.Parent = MainSide
-
     coverup_2.Name = "coverup"
     coverup_2.Parent = MainSide
     coverup_2.BackgroundColor3 = themeList.Header
@@ -373,9 +379,7 @@ function Kavo.CreateLib(kavName, themeList)
     tabFrames.Position = UDim2.new(0.0438990258, 0, -0.00066378375, 0)
     tabFrames.Size = UDim2.new(0, 135, 0, 283)
 
-    tabListing.Name = "tabListing"
-    tabListing.Parent = tabFrames
-    tabListing.SortOrder = Enum.SortOrder.LayoutOrder
+	UIListLayout(tabFrames, false, 0)
 
     pages.Name = "pages"
     pages.Parent = Main
