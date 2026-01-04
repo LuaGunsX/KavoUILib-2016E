@@ -56,7 +56,7 @@ end
 --// END \\--
 local Kavo = {}
 
-local tween = game:GetService("TweenService")
+-- local tween = game:GetService("TweenService")
 local tweeninfo = TweenInfo.new
 local input = game:GetService("UserInputService")
 local run = game:GetService("RunService")
