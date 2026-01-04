@@ -136,10 +136,10 @@ local Name = "KavoConfig.JSON"
 pcall(function()
 
 if not pcall(function() readfile(Name) end) then
-writefile(Name, game:service'HttpService':JSONEncode(SettingsT))
+writefile(Name, game:GetService('HttpService'):JSONEncode(SettingsT))
 end
 
-Settings = game:service'HttpService':JSONEncode(readfile(Name))
+Settings = game:GetService('HttpService'):JSONEncode(readfile(Name))
 end)
 
 local LibName = tostring(math.random(1, 100))..tostring(math.random(1,50))..tostring(math.random(1, 100))
